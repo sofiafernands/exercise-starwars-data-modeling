@@ -8,13 +8,13 @@ Base = declarative_base() #esta  funcion proporcionada por sqlalqhemy (declarati
 
 # Se definen varias clases(tablas) que representan las tablas en la base de datos. Cada clase hereda de la clase Base definida anteriormente.
 class User(Base):
-    __tablename__ = 'user'  #__tablename__ Especifica el nombre de la tabla en la base de datos para cada clase.
-    id = Column(Integer, primary_key=True)
-    name = Column(String(250), nullable=False)
-    email = Column(String(250), nullable=False)
-    favorites_planets = relationship('FavoritesPlanets', backref='user', lazy=True) #Se definen relaciones entre las tablas utilizando la función relationship de SQLAlchemy.
-    favorites_characters = relationship('FavoritesCharacters', backref='user', lazy=True) #Se definen relaciones entre las tablas utilizando la función relationship de SQLAlchemy.
-    favorites_vehicles = relationship('FavoritesVehicles', backref='user', lazy=True) #Se definen relaciones entre las tablas utilizando la función relationship de SQLAlchemy.
+        __tablename__ = 'user'  #__tablename__ Especifica el nombre de la tabla en la base de datos para cada clase.
+        id = Column(Integer, primary_key=True)
+        name = Column(String(250), nullable=False)
+        email = Column(String(250), nullable=False)
+        favorites_planets = relationship('FavoritesPlanets', backref='user', lazy=True) #Se definen relaciones entre las tablas utilizando la función relationship de SQLAlchemy.
+        favorites_characters = relationship('FavoritesCharacters', backref='user', lazy=True) #Se definen relaciones entre las tablas utilizando la función relationship de SQLAlchemy.
+        favorites_vehicles = relationship('FavoritesVehicles', backref='user', lazy=True) #Se definen relaciones entre las tablas utilizando la función relationship de SQLAlchemy.
 
 class Characters(Base):
         __tablename__ = 'characters'
@@ -24,14 +24,13 @@ class Characters(Base):
         name = Column(String(250), nullable=False)
         gender = Column(String(250), nullable=False)
         eye_color = Column(String(250), nullable=False)
-
-        #backref='planets' crea un atributo en la tabla Planets que permite acceder a los registros relacionados en la tabla FavoritesPlanets, y 
-        # lazy=True configura la carga diferida de los registros relacionados, cargandolos solo cuando se accede a ellos explicitamente.
+             #backref='characters' crea un atributo en la tabla characters que permite acceder a los registros relacionados en la tabla FavoritesCharacters, y 
+            # lazy=True configura la carga diferida de los registros relacionados, cargandolos solo cuando se accede a ellos explicitamente.
         favorites_character = relationship('FavoritesCharacters', backref='characters', lazy=True) #backref en SQLAlchemy es utilizada para establecer una relacion
                                                                                                 #bidireccional entre las tablas. En este caso, cuando se establece 
-                                                                                                # backref='planets' en la relación de la tabla FavoritesPlanets, se crea 
-                                                                                                # automáticamente un atributo adicional en la tabla Planets que permite 
-                                                                                                # acceder a los registros relacionados en la tabla FavoritesPlanets
+                                                                                                # backref='characters' en la relación de la tabla FavoritesCharacters, se crea 
+                                                                                                # automáticamente un atributo adicional en la tabla Characters que permite 
+                                                                                                # acceder a los registros relacionados en la tabla FavoritesCharacters
 
 class Planets(Base):
         __tablename__ = 'planets'
@@ -54,7 +53,7 @@ class Vehicles(Base):
         name = Column(String(250), nullable=False)
         passengers = Column(String(250), nullable=False)
         type = Column(String(250), nullable=False)
-        favorites_vehicles = relationship('FavoritesVehicles', backref='vehicles', lazy=True)
+        favorites_vehicles = relationship('FavoritesVehicles', backref='vehicles', lazy=True) #
 
 class FavoritesCharacters(Base):
         __tablename__ = "favoritescharacters"
@@ -71,17 +70,19 @@ class FavoritesPlanets(Base):
 
 
 class FavoritesVehicles(Base):
-    __tablename__ = "favoritesvehicles"
-    id = Column (Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('user.id'))
-    vehicles_id = Column(Integer, ForeignKey('vehicles.id'), nullable=False)
+        __tablename__ = "favoritesvehicles"
+        id = Column (Integer, primary_key=True)
+        user_id = Column(Integer, ForeignKey('user.id'))
+        vehicles_id = Column(Integer, ForeignKey('vehicles.id'), nullable=False)
 
    
         
-def to_dict(self): #esta función se implementaría para convertir un objeto de la clase en un diccionario
-        return {}
+        # def to_dict(self): #esta función se implementaría para convertir un objeto de la clase en un diccionario, en este caso no es necesario ya que no lo estamos
+                             #retornando en formato diccionario
+        #         return {}
 
 ## Draw from SQLAlchemy base
 render_er(Base, 'diagram.png') #La función render_er se llama con los argumentos Base y 'diagram.png'.
                                 #Genera un diagrama ER(entidad relaciones) en formato PNG a partir de los 
-                                # modelos definidos en SQLAlchemy y lo guarda como "diagram.png" en el directorio actual.
+                                # modelos definidos en SQLAlchemy y lo guarda como "diagram.png" en el directorio actual, para obtenerlo graficamente, escribimos en 
+                                #la terminal $ pipenv run diagram
